@@ -32,8 +32,8 @@ const gameboard = (() => {
     return { getBoard, addSign, clearBoard };
 })();
 
-const player = (playerName, playerSign) => {
-    let playerName = playerName;
+const player = (name, playerSign) => {
+    let playerName = name;
     const sign = playerSign;
 
     const setName = (newName) => {
@@ -182,10 +182,13 @@ const ScreenController = function() {
         
         if (!selectedCell) return;
         
+        resultDiv.textContent = "";
         game.playRound(selectedCell);
         updateScreen();
     }
 
+    boardDiv.addEventListener("click", clickHandler);
+    newGame.addEventListener("click", () => game.newGame());
+};
 
-
-}
+ScreenController();

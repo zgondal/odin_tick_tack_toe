@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(50, 50, 50);
+    font-family: 'Comic Sans MS', cursive;
+    align-items: center;
+    color: whitesmoke;
+}
+
+.nav {
+    input {
+        background-color: rgb(50, 50, 50);
+        color: whitesmoke;
+    }
+}
+.board {
+    display: grid;
+    grid-template-columns: 30px 30px 30px;
+
+    // &:nth-child() {
+
+    // }
+    .cell {
+
+    }
+}
