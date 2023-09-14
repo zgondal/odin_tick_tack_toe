@@ -146,16 +146,15 @@ const ScreenController = () => {
     const boardDiv = document.querySelector(".board");
     const resultDiv = document.querySelector(".result");
     const newGame = document.getElementById("newgame");
-    const playerOneName = document.getElementById("playerOneName");
-    const playerTwoName = document.getElementById("playerTwoName");
-    game.setPlayerName(1, playerOneName.value);
-    game.setPlayerName(2, playerTwoName.value);
+    // const playerOneName = document.getElementById("playerOneName");
+    // const playerTwoName = document.getElementById("playerTwoName");
+    // game.setPlayerName(1, playerOneName.value);
+    // game.setPlayerName(2, playerTwoName.value);
 
     const updateScreen = () => {
         boardDiv.textContent = "";
         const board = game.printBoard();
         const activePlayer = game.getActivePlayer();
-        console.log(activePlayer.name);
 
         playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
 
@@ -163,7 +162,7 @@ const ScreenController = () => {
             row.forEach((cell, colIndex) => {
                 const cellButton = document.createElement("button");
                 const index = rowIndex*3 + colIndex;
-                cellButton.classList.add("cell", "drop");
+                cellButton.classList.add("cell");
                 cellButton.dataset.index = index;
                 if (cell === 1) {
                     cellButton.innerHTML = playerOneSign;
@@ -177,17 +176,26 @@ const ScreenController = () => {
         if (game.getResult() === 1) {
             const result = `${activePlayer.name} wins!!!`;
             resultDiv.textContent = result;
+            disableButtons();
         } else if (game.getResult() === 0) {
             const result = `Game ends in a tie ¯\\_(ツ)_/¯`;
             resultDiv.textContent = result;
+            disableButtons();
         } else if (game.getResult() === 2) {
             const result = `${activePlayer.name} wins!!!`;
             resultDiv.textContent = result;
+            disableButtons();
         }
+    }
+
+    const disableButtons = function() {
+        cells = document.querySelectorAll(".cell");
+        cells.forEach((button) => {button.disabled = true;} )
     }
 
     const clickHandler = function(e) {
         const selectedCell = e.target.dataset.index;
+        console.log(selectedCell);
         if (!selectedCell) return;
         
         game.playRound(selectedCell) 

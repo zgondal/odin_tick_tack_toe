@@ -6,11 +6,20 @@ body {
   align-items: center;
   color: whitesmoke;
   font-size: 1.7vw;
+  gap: 32px;
+}
+
+h2 {
+  margin: 0;
+  padding: 0;
 }
 
 .nav input {
   background-color: rgb(50, 50, 50);
   color: whitesmoke;
+}
+.nav label {
+  font-size: 1.5rem;
 }
 
 .board {
@@ -18,6 +27,8 @@ body {
   grid-template-columns: 9rem 9rem 9rem;
   grid-template-rows: 9rem 9rem 9rem;
   place-content: center;
+  gap: 8px;
+  background-color: whitesmoke;
 }
 .board button {
   background-color: rgb(50, 50, 50);
@@ -28,28 +39,6 @@ body {
   width: 80%;
   height: auto; /* safari 6.0 - 9.0 */
   filter: invert(100%);
-}
-.board :nth-child(n+1):nth-child(-n+3) {
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-.board :nth-child(3n+1) {
-  padding-left: 12px;
-  padding-right: 12px;
-}
-.board :nth-child(3n+3) {
-  padding: 0 12px;
-}
-.board :nth-child(3n+3) > svg {
-  padding: 8px 0;
-}
-.board :nth-child(n+4):nth-child(-n+6) {
-  border-top: 8px solid whitesmoke;
-  border-bottom: 8px solid whitesmoke;
-}
-.board :nth-child(3n+2) {
-  border-left: 8px solid whitesmoke;
-  border-right: 8px solid whitesmoke;
 }
 
 .board > .drop svg {
@@ -67,4 +56,7 @@ body {
     transform: translateY(0); /* End position, no vertical translation */
     opacity: 1; /* Fully visible at the end */
   }
+}
+.turn, .result {
+  font-size: 1.5rem;
 }/*# sourceMappingURL=main.css.map */
