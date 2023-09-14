@@ -5,6 +5,7 @@ body {
     font-family: 'Comic Sans MS', cursive;
     align-items: center;
     color: whitesmoke;
+    font-size: 1.7vw;
 }
 
 .nav {
@@ -13,14 +14,72 @@ body {
         color: whitesmoke;
     }
 }
+
 .board {
     display: grid;
-    grid-template-columns: 30px 30px 30px;
+    grid-template-columns: 9rem 9rem 9rem;
+    grid-template-rows: 9rem 9rem 9rem;
+    place-content: center;
+    // gap: 8px;
 
-    // &:nth-child() {
+    button {
+        background-color: rgb(50, 50, 50);
+        border: none;
+        box-sizing: border-box;
+        // padding: 4px;
+    }
 
-    // }
-    .cell {
+    button > svg {
+        width: 80%;
+        height: auto;
+        -webkit-filter: invert(100%); /* safari 6.0 - 9.0 */
+        filter: invert(100%);
+    }
 
+    :nth-child(n+1):nth-child(-n+3) {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+    
+    :nth-child(3n+1) {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    :nth-child(3n+3) {
+        padding: 0 12px;
+    }
+
+    :nth-child(3n+3) > svg {
+        padding: 8px 0;
+    }
+
+    :nth-child(n+4):nth-child(-n+6) {
+        border-top: 8px solid whitesmoke;
+        border-bottom: 8px solid whitesmoke;
+    }
+
+    :nth-child(3n+2) {
+        border-left: 8px solid whitesmoke;
+        border-right: 8px solid whitesmoke;
     }
 }
+
+.board > .drop {
+    svg {
+        animation-name: dropAnimation;
+        animation-duration: 0.3s;
+        animation-timing-function: ease-out;
+    }
+}
+
+@keyframes dropAnimation {
+    from {
+      transform: translateY(-20px); /* Start position, lifted by 10px */
+      opacity: 0; /* Start with opacity 0 for a fade-in effect */
+    }
+    to {
+      transform: translateY(0); /* End position, no vertical translation */
+      opacity: 1; /* Fully visible at the end */
+    }
+  }

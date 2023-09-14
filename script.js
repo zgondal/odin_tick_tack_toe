@@ -13,7 +13,7 @@ const gameboard = (() => {
     const getBoard = () => { return board; };
 
     const addSign = (index, player) => {
-        const row = index / 3;
+        const row = Math.floor(index / 3);
         const col = index % 3;
         if (board[row][col] !== 0) {
             return undefined;
@@ -23,24 +23,25 @@ const gameboard = (() => {
     }
     
     const clearBoard = () => {
-        board.forEach(row => {row.forEach((cellValue) => {
-            cellValue = 0;
+        board.forEach(row => {row.forEach((cellValue, columnIndex) => {
+            row[columnIndex] = 0;
         });
     })
-    }
+    };
 
     return { getBoard, addSign, clearBoard };
 })();
 
 const player = (name, playerSign) => {
-    let playerName = name;
+    name = name;
     const sign = playerSign;
 
     const setName = (newName) => {
-        playerName = newName;
+        name = newName;
+        console.log("in player function, new name: " + name);
     };
 
-    return {playerName, sign, setName};
+    return {name, sign, setName};
 }
 
 const gameController = (() => {
@@ -48,36 +49,37 @@ const gameController = (() => {
     const playerOne = player("Player 1", 1);
     const playerTwo = player("Player 2", 2);
     let activePlayer = playerOne;
-    let winState = false;
-    let isTie = false;
+    let winState = -1;
 
     const switchActivePlayer = () => {
-        activePlayer = activePlayer === playerOne ? playerTwo : playerOne;
+        activePlayer = (activePlayer === playerOne ? playerTwo : playerOne);
     }
 
     const getActivePlayer = () => {
         return activePlayer;
     }
 
+    const getResult = () => {
+        return winState;
+    }
+
     const setPlayerName = (player, newName) => {
         if (player === 1) {
             playerOne.setName(newName);
+            console.log("changed player 1 name");
+            console.log("in game controller, new name:" + playerOne.name);
         } else if (player === 2) {
             playerTwo.setName(newName);
+            console.log("changed player 2 name");
+            console.log("in game controller, new name: " + playerTwo.name);
         }
     }
 
     const playRound = (cellIndex) => {
-        const row = cellIndex / 3;
-        const col = cellIndex % 3;
-
-        if (board.addSign(cellIndex, activePlayer) === undefined) return;
-        else {
-            board.addSign(cellIndex, activePlayer);
-            switchActivePlayer;
-        }
+        board.addSign(cellIndex, activePlayer);
         checkWinCondition();
         checkTieCondition();
+        if (winState === -1) switchActivePlayer();
     }
 
     const checkWinCondition = () => {
@@ -86,7 +88,7 @@ const gameController = (() => {
             if (row[0] === 0) {
               continue; // Skip to the next iteration if the first condition is met.
             } else if (row[0] === row[1] && row[1] === row[2]) {
-              winState = true;
+              winState = activePlayer.sign;
               break; // You can use break to exit the loop when the second condition is met.
             }
         }
@@ -94,15 +96,15 @@ const gameController = (() => {
             if (boardArray[0][col] === 0) {
                 continue;
             } else if (boardArray[0][col] === boardArray[1][col] && boardArray[1][col] === boardArray[2][col]) {
-                winState = true;
+                winState = activePlayer.sign;
                 break;
             }
         }
         if (boardArray[0][0] !== 0) {
-            if (boardArray[0][0] === boardArray[1][1] && boardArray[1][1] === boardArray[2][2]) { winState = true; }
+            if (boardArray[0][0] === boardArray[1][1] && boardArray[1][1] === boardArray[2][2]) { winState = activePlayer.sign; }
         }
         if (boardArray[0][2] !== 0 && (boardArray[0][2] === boardArray[1][1] && boardArray[1][1] == boardArray[2][0])) {
-            winState = true;
+            winState = activePlayer.sign;
         }
         return; 
     }
@@ -116,7 +118,10 @@ const gameController = (() => {
                 }
             }
         }
-        if (!winState) isTie = true;
+        if (winState !== 1 && winState !== 2) {
+            winState = 0;
+            console.log("set win state to tie");
+        }
         return;
     }
 
@@ -127,37 +132,38 @@ const gameController = (() => {
     const newGame = function() {
         board.clearBoard();
         switchActivePlayer();
+        winState = -1;
     }
 
-    return { getActivePlayer, setPlayerName, playRound, winState, newGame, printBoard, isTie};
+    return { getActivePlayer, setPlayerName, playRound, getResult, newGame, printBoard };
 })();
 
-const ScreenController = function() {
+const ScreenController = () => {
     const game = gameController;
-    const playerOneSign = `<svg viewBox="0 0 25 25" version="1.1" fill="#ffffff" style="--darkreader-inline-fill: #000000; --darkreader-inline-stroke: #e8e6e3;" data-darkreader-inline-fill="" stroke="#ffffff" data-darkreader-inline-stroke=""><g stroke-linecap="round" stroke-linejoin="round"></g> <g sketch:type="MSLayerGroup" transform="translate(-469.000000, -1041.000000)" fill="#000000" style="--darkreader-inline-fill: #000000;" data-darkreader-inline-fill=""> <path d="M487.148,1053.48 L492.813,1047.82 C494.376,1046.26 494.376,1043.72 492.813,1042.16 C491.248,1040.59 488.712,1040.59 487.148,1042.16 L481.484,1047.82 L475.82,1042.16 C474.257,1040.59 471.721,1040.59 470.156,1042.16 C468.593,1043.72 468.593,1046.26 470.156,1047.82 L475.82,1053.48 L470.156,1059.15 C468.593,1060.71 468.593,1063.25 470.156,1064.81 C471.721,1066.38 474.257,1066.38 475.82,1064.81 L481.484,1059.15 L487.148,1064.81 C488.712,1066.38 491.248,1066.38 492.813,1064.81 C494.376,1063.25 494.376,1060.71 492.813,1059.15 L487.148,1053.48" id="cross" sketch:type="MSShapeGroup"> </path></svg>`;
-    const playerTwoSign = `<svg fill="#ffffff" viewBox="0 0 25 25" version="1.1"><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><path d="M150,0C67.29,0,0,67.29,0,150s67.29,150,150,150s150-67.29,150-150S232.71,0,150,0z M150,270c-66.169,0-120-53.832-120-120 S83.831,30,150,30s120,53.832,120,120S216.168,270,150,270z"></path></svg>`;
+    const playerOneSign = `<svg viewBox="0 0 25 25" version="1.1" fill="#ffffff" stroke="#000000" data-darkreader-inline-stroke=""><g stroke-linecap="round" stroke-linejoin="round"></g> <g sketch:type="MSLayerGroup" transform="translate(-469.000000, -1041.000000)" fill="#000000" style="--darkreader-inline-fill: #000000;" data-darkreader-inline-fill=""> <path d="M487.148,1053.48 L492.813,1047.82 C494.376,1046.26 494.376,1043.72 492.813,1042.16 C491.248,1040.59 488.712,1040.59 487.148,1042.16 L481.484,1047.82 L475.82,1042.16 C474.257,1040.59 471.721,1040.59 470.156,1042.16 C468.593,1043.72 468.593,1046.26 470.156,1047.82 L475.82,1053.48 L470.156,1059.15 C468.593,1060.71 468.593,1063.25 470.156,1064.81 C471.721,1066.38 474.257,1066.38 475.82,1064.81 L481.484,1059.15 L487.148,1064.81 C488.712,1066.38 491.248,1066.38 492.813,1064.81 C494.376,1063.25 494.376,1060.71 492.813,1059.15 L487.148,1053.48" id="cross" sketch:type="MSShapeGroup"> </path></svg>`;
+    const playerTwoSign = `<svg viewBox="0 0 24 24" fill="none" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#000000" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>`;
     const playerTurnDiv = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
     const resultDiv = document.querySelector(".result");
     const newGame = document.getElementById("newgame");
-    const playerOneName = document.getElementById("playerOneName").value;
-    const playerTwoName = document.getElementById("playerTwoName").value;
+    const playerOneName = document.getElementById("playerOneName");
+    const playerTwoName = document.getElementById("playerTwoName");
+    game.setPlayerName(1, playerOneName.value);
+    game.setPlayerName(2, playerTwoName.value);
 
-    game.setPlayerName(1, playerOneName);
-    game.setPlayerName(2, playerTwoName);
-
-    const updateScreen = function() {
+    const updateScreen = () => {
         boardDiv.textContent = "";
         const board = game.printBoard();
         const activePlayer = game.getActivePlayer();
+        console.log(activePlayer.name);
 
-        playerTurnDiv.textContent = `${activePlayer.playerName}'s turn...`
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
 
         board.forEach((row, rowIndex) => {
             row.forEach((cell, colIndex) => {
                 const cellButton = document.createElement("button");
                 const index = rowIndex*3 + colIndex;
-                cellButton.classList.add("cell");
+                cellButton.classList.add("cell", "drop");
                 cellButton.dataset.index = index;
                 if (cell === 1) {
                     cellButton.innerHTML = playerOneSign;
@@ -166,29 +172,37 @@ const ScreenController = function() {
                 }
                 boardDiv.appendChild(cellButton);
             })
-        })
+        });
 
-        if (game.winState) {
-            const result = `${activePlayer.playerName} wins!!!`;
+        if (game.getResult() === 1) {
+            const result = `${activePlayer.name} wins!!!`;
             resultDiv.textContent = result;
-        } else if (game.isTie) {
+        } else if (game.getResult() === 0) {
             const result = `Game ends in a tie ¯\\_(ツ)_/¯`;
+            resultDiv.textContent = result;
+        } else if (game.getResult() === 2) {
+            const result = `${activePlayer.name} wins!!!`;
             resultDiv.textContent = result;
         }
     }
 
     const clickHandler = function(e) {
         const selectedCell = e.target.dataset.index;
-        
         if (!selectedCell) return;
         
-        resultDiv.textContent = "";
-        game.playRound(selectedCell);
+        game.playRound(selectedCell) 
         updateScreen();
     }
 
+    updateScreen();
     boardDiv.addEventListener("click", clickHandler);
-    newGame.addEventListener("click", () => game.newGame());
+    newGame.addEventListener("click", () => {
+        game.newGame();
+        resultDiv.textContent = ""; 
+        updateScreen();
+    });
+
+    window.game = game;
 };
 
 ScreenController();
