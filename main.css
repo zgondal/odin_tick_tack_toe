@@ -65,6 +65,7 @@ body {
 .main > .right > .result {
   font-weight: 900;
   font-size: 2rem;
+  color: green;
 }
 
 h2 {

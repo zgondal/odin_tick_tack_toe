@@ -204,7 +204,7 @@ const ScreenController = () => {
     boardDiv.addEventListener("click", clickHandler);
     newGame.addEventListener("click", () => {
         game.newGame();
-        resultDiv.textContent = ""; 
+        resultDiv.innerHTML = "&nbsp;"; 
         updateScreen();
     });
 
