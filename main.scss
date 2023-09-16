@@ -1,12 +1,79 @@
+:root {
+    --background: rgb(39, 39, 39);
+    --font-color: whitesmoke;
+    font-size: 20px;
+}
+
 body {
     display: flex;
     flex-direction: column;
-    background-color: rgb(50, 50, 50);
-    font-family: 'Comic Sans MS', cursive;
+    background-color: var(--background);
+    font-family: 'Bad Script';
     align-items: center;
-    color: whitesmoke;
-    font-size: 1.7vw;
-    gap: 24px;
+    color: var(--font-color);
+    gap: 32px;
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+    gap: 64px;
+
+    > .left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+
+        input {
+            background-color: var(--background);
+            color: var(--font-color);
+            border-radius: 32px;
+            font-size: 1.2rem;
+            font-family: 'Bad Script';
+        }
+    
+        label {
+            font-size: 1.5rem;
+        }
+    
+        button {
+            background-color: var(--background);
+            border: none;
+            padding: none;
+            margin: none;
+            font-size: 1.5rem;
+            color: whitesmoke;
+            font-family: 'Bad Script';
+        }
+    
+        svg {
+            -webkit-filter: invert(100%); /* safari 6.0 - 9.0 */
+            filter: invert(100%);
+            width: 2.5rem;
+            height: auto;
+            transform: translateY(13px);
+        }
+        ul {
+            list-style: none;
+        }
+    }
+
+    > .right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+
+        > .turn {
+            font-size: 1.5rem;
+        }
+
+        > .result {
+            font-weight: 900;
+            font-size: 2rem;
+        }
+    }
 }
 
 h2 {
@@ -15,41 +82,16 @@ h2 {
 
 }
 
-nav {
-    input {
-        background-color: rgb(50, 50, 50);
-        color: whitesmoke;
-    }
-
-    label {
-        font-size: 1.5rem;
-    }
-
-    button {
-        background-color: rgb(50, 50, 50);
-        border: none;
-        padding: none;
-        margin: none;
-    }
-
-    svg {
-        -webkit-filter: invert(100%); /* safari 6.0 - 9.0 */
-        filter: invert(100%);
-        width: 2.5rem;
-        height: auto;
-    }
-}
-
 .board {
     display: grid;
-    grid-template-columns: 8rem 8rem 8rem;
-    grid-template-rows: 8rem 8rem 8rem;
+    grid-template-columns: 6rem 6rem 6rem;
+    grid-template-rows: 6rem 6rem 6rem;
     place-content: center;
     gap: 8px;
-    background-color: whitesmoke;
+    background-color: var(--font-color);
 
     button {
-        background-color: rgb(50, 50, 50);
+        background-color: var(--background);
         border: none;
         box-sizing: border-box;
         // padding: 4px;

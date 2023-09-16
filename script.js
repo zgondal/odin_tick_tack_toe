@@ -32,10 +32,8 @@ const gameboard = (() => {
     return { getBoard, addSign, clearBoard };
 })();
 
-const player = (name, playerSign) => {
-    name = name;
-    const sign = playerSign;
-
+const player = (name, sign) => {
+    
     const setName = (newName) => {
         name = newName;
         console.log("in player function, new name: " + name);
@@ -148,8 +146,8 @@ const ScreenController = () => {
     const newGame = document.getElementById("newgame");
     // const playerOneName = document.getElementById("playerOneName");
     // const playerTwoName = document.getElementById("playerTwoName");
-    // game.setPlayerName(1, playerOneName.value);
-    // game.setPlayerName(2, playerTwoName.value);
+    game.setPlayerName(1, "playerOneName.value");
+    game.setPlayerName(2, "playerTwoName.value");
 
     const updateScreen = () => {
         boardDiv.textContent = "";
