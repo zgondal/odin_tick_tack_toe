@@ -32,20 +32,25 @@ const gameboard = (() => {
     return { getBoard, addSign, clearBoard };
 })();
 
-const player = (name, sign) => {
+class player {
+    constructor(name, sign) {
+        this._playerName = name;
+        this.sign = sign;
+    }
     
-    const setName = (newName) => {
-        name = newName;
-        console.log("in player function, new name: " + name);
-    };
+    get playerName() {
+        return this._playerName;
+    }
 
-    return {name, sign, setName};
+    set playerName(value) {
+        this._playerName = value;
+    }
 }
 
 const gameController = (() => {
     const board = gameboard;
-    const playerOne = player("Player 1", 1);
-    const playerTwo = player("Player 2", 2);
+    const playerOne = new player("Player 1", 1);
+    const playerTwo = new player("Player 2", 2);
     let activePlayer = playerOne;
     let winState = -1;
 
@@ -63,11 +68,11 @@ const gameController = (() => {
 
     const setPlayerName = (player, newName) => {
         if (player === 1) {
-            playerOne.setName(newName);
+            playerOne.playerName = newName;
             console.log("changed player 1 name");
             console.log("in game controller, new name:" + playerOne.name);
         } else if (player === 2) {
-            playerTwo.setName(newName);
+            playerTwo.playerName = newName;
             console.log("changed player 2 name");
             console.log("in game controller, new name: " + playerTwo.name);
         }
@@ -144,17 +149,17 @@ const ScreenController = () => {
     const boardDiv = document.querySelector(".board");
     const resultDiv = document.querySelector(".result");
     const newGame = document.getElementById("newgame");
-    // const playerOneName = document.getElementById("playerOneName");
-    // const playerTwoName = document.getElementById("playerTwoName");
-    game.setPlayerName(1, "playerOneName.value");
-    game.setPlayerName(2, "playerTwoName.value");
+    const playerOneName = document.getElementById("playerOneName");
+    const playerTwoName = document.getElementById("playerTwoName");
+    game.setPlayerName(1, playerOneName.value);
+    game.setPlayerName(2, playerTwoName.value);
 
     const updateScreen = () => {
         boardDiv.textContent = "";
         const board = game.printBoard();
         const activePlayer = game.getActivePlayer();
 
-        playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
+        playerTurnDiv.textContent = `${activePlayer.playerName}'s turn...`
 
         board.forEach((row, rowIndex) => {
             row.forEach((cell, colIndex) => {
@@ -172,7 +177,7 @@ const ScreenController = () => {
         });
 
         if (game.getResult() === 1) {
-            const result = `${activePlayer.name} wins!!!`;
+            const result = `${activePlayer.playerName} wins!!!`;
             resultDiv.textContent = result;
             disableButtons();
         } else if (game.getResult() === 0) {
@@ -180,7 +185,7 @@ const ScreenController = () => {
             resultDiv.textContent = result;
             disableButtons();
         } else if (game.getResult() === 2) {
-            const result = `${activePlayer.name} wins!!!`;
+            const result = `${activePlayer.playerName} wins!!!`;
             resultDiv.textContent = result;
             disableButtons();
         }
@@ -193,7 +198,6 @@ const ScreenController = () => {
 
     const clickHandler = function(e) {
         const selectedCell = e.target.dataset.index;
-        console.log(selectedCell);
         if (!selectedCell) return;
         
         game.playRound(selectedCell) 
