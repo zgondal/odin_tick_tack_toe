@@ -51,6 +51,7 @@ const gameController = (() => {
     const board = gameboard;
     const playerOne = new player("Player 1", 1);
     const playerTwo = new player("Player 2", 2);
+    let ai_opponent = false;
     let activePlayer = playerOne;
     let winState = -1;
 
@@ -66,19 +67,36 @@ const gameController = (() => {
         return winState;
     }
 
+    const playAgainstAI = () => {
+        ai_opponent = !ai_opponent;
+    }
+
     const setPlayerName = (player, newName) => {
         if (player === 1) {
             playerOne.playerName = newName;
-            console.log("changed player 1 name");
-            console.log("in game controller, new name:" + playerOne.name);
         } else if (player === 2) {
             playerTwo.playerName = newName;
-            console.log("changed player 2 name");
-            console.log("in game controller, new name: " + playerTwo.name);
         }
     }
 
     const playRound = (cellIndex) => {
+        board.addSign(cellIndex, activePlayer);
+        checkWinCondition();
+        checkTieCondition();
+        if (winState === -1) switchActivePlayer();
+    }
+
+    const aiTurn = () => {
+        cellIndex = Math.floor(Math.random() * 9);
+        currentBoard = board.getBoard();
+        console.log(cellIndex);
+        let row = Math.floor(cellIndex / 3);
+        let col = cellIndex % 3;
+        while (currentBoard[row][col] !== 0) {
+            cellIndex = Math.floor(Math.random() * 9);
+            row = Math.floor(cellIndex / 3);
+            col = cellIndex % 3;
+        }
         board.addSign(cellIndex, activePlayer);
         checkWinCondition();
         checkTieCondition();
@@ -134,11 +152,13 @@ const gameController = (() => {
 
     const newGame = function() {
         board.clearBoard();
-        switchActivePlayer();
+        if (!ai_opponent) {
+            switchActivePlayer();
+        }
         winState = -1;
     }
 
-    return { getActivePlayer, setPlayerName, playRound, getResult, newGame, printBoard };
+    return { getActivePlayer, setPlayerName, playRound, getResult, newGame, printBoard, playAgainstAI, aiTurn };
 })();
 
 const ScreenController = () => {
@@ -151,10 +171,43 @@ const ScreenController = () => {
     const newGame = document.getElementById("newgame");
     const playerOneName = document.getElementById("playerOneName");
     const playerTwoName = document.getElementById("playerTwoName");
-    game.setPlayerName(1, playerOneName.value);
-    game.setPlayerName(2, playerTwoName.value);
+    const aiOpponentSelected = document.querySelector('input[type="radio"][id="computer"]');
+    const humanOpponent = document.querySelector('input[type="radio"][id="human"]');
+    let aiOpponent = 0;
+    const changePlayerOneName = function(value) {
+        game.setPlayerName(1, value);
+    };
+    const changePlayerTwoName = function(value) {
+        game.setPlayerName(2, value);
+    };
+
+    aiOpponentSelected.addEventListener("change", () => {
+        console.log("changing opponent to ai");
+        aiOpponent = 1;
+        game.playAgainstAI();
+        playerTwoName.disabled = true;
+        game.newGame();
+        console.log("opponent changed to ai");
+    })
+
+    humanOpponent.addEventListener("change", () => {
+        aiOpponent = 0;
+        game.playAgainstAI();
+        playerTwoName.disabled = false;
+        game.newGame();
+    })
+
+    document.addEventListener("DOMContentLoaded", () => {
+        if (aiOpponentSelected.checked) {
+            aiOpponent = 1;
+            game.playAgainstAI();
+            playerTwoName.disabled = true;
+        }
+    })
 
     const updateScreen = () => {
+        changePlayerOneName(playerOneName.value);
+        changePlayerTwoName(playerTwoName.value);
         boardDiv.textContent = "";
         const board = game.printBoard();
         const activePlayer = game.getActivePlayer();
@@ -200,7 +253,10 @@ const ScreenController = () => {
         const selectedCell = e.target.dataset.index;
         if (!selectedCell) return;
         
-        game.playRound(selectedCell) 
+        game.playRound(selectedCell);
+        if (aiOpponent && game.getResult() === -1) {
+            game.aiTurn();
+        } 
         updateScreen();
     }
 
@@ -212,6 +268,14 @@ const ScreenController = () => {
         updateScreen();
     });
 
+    playerOneName.addEventListener("input", (event) => {
+        changePlayerOneName(event.target.value);
+        updateScreen();
+    });
+    playerTwoName.addEventListener("input", (event) => {
+        changePlayerTwoName(event.target.value);
+        updateScreen();
+    });
     window.game = game;
 };
 
