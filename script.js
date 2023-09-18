@@ -155,6 +155,9 @@ const gameController = (() => {
         if (!ai_opponent) {
             switchActivePlayer();
         }
+        if (ai_opponent && this.getActivePlayer().sign === 2) {
+            switchActivePlayer();
+        }
         winState = -1;
     }
 
@@ -192,6 +195,7 @@ const ScreenController = () => {
     const disableAIOpponent = function() {
         aiOpponent = 0;
         game.playAgainstAI();
+        playerTwoName.value = "Player Two";
         playerTwoName.disabled = false;
         game.newGame();
     }
@@ -202,9 +206,7 @@ const ScreenController = () => {
 
     document.addEventListener("DOMContentLoaded", () => {
         if (aiOpponentSelected.checked) {
-            aiOpponent = 1;
-            game.playAgainstAI();
-            playerTwoName.disabled = true;
+            enableAIOpponent();
         }
     })
 
@@ -285,7 +287,6 @@ const ScreenController = () => {
         changePlayerTwoName(event.target.value);
         updateScreen();
     });
-    window.game = game;
 };
 
 ScreenController();
