@@ -24,7 +24,12 @@ body {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 8px;
+        padding-right: 64px;
+        border-right: 2px solid rgba(192, 192, 192, 0.484);
+
+        fieldset {
+            border-radius: 16px;
+        }
 
         input {
             background-color: var(--background);
@@ -75,7 +80,7 @@ body {
             font-size: 2rem;
             color: var(--result-color);
             animation: neon 1.5s ease-in-out infinite;
-            text-shadow: 0 0 10px , 0 0 20px , 0 0 30px , 0 0 40px ;
+            text-shadow: 0 0 10px var(--result-color), 0 0 20px var(--result-color), 0 0 30px var(--result-color), 0 0 40px var(--result-color);
 
         }
     }
