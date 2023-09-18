@@ -180,22 +180,25 @@ const ScreenController = () => {
     const changePlayerTwoName = function(value) {
         game.setPlayerName(2, value);
     };
-
-    aiOpponentSelected.addEventListener("change", () => {
+    const enableAIOpponent = function() {
         console.log("changing opponent to ai");
         aiOpponent = 1;
         game.playAgainstAI();
+        playerTwoName.value = "Computer";
         playerTwoName.disabled = true;
         game.newGame();
         console.log("opponent changed to ai");
-    })
-
-    humanOpponent.addEventListener("change", () => {
+    };
+    const disableAIOpponent = function() {
         aiOpponent = 0;
         game.playAgainstAI();
         playerTwoName.disabled = false;
         game.newGame();
-    })
+    }
+
+    aiOpponentSelected.addEventListener("change", enableAIOpponent);
+
+    humanOpponent.addEventListener("change", disableAIOpponent);
 
     document.addEventListener("DOMContentLoaded", () => {
         if (aiOpponentSelected.checked) {
@@ -254,7 +257,10 @@ const ScreenController = () => {
 
     const clickHandler = function(e) {
         const selectedCell = e.target.dataset.index;
-        if (!selectedCell) return;
+        const row = Math.floor(selectedCell / 3);
+        const col = selectedCell % 3;
+        
+        if (!selectedCell || game.printBoard()[row][col] != 0) return;
         
         game.playRound(selectedCell);
         if (aiOpponent && game.getResult() === -1) {

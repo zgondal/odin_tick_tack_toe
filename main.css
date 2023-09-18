@@ -33,7 +33,8 @@ body {
 .main > .left input {
   background-color: var(--background);
   color: var(--font-color);
-  border-radius: 32px;
+  border-radius: 16px;
+  border: 2px solid whitesmoke;
   font-size: 1.2rem;
   font-family: "Bad Script";
 }
