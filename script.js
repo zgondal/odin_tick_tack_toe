@@ -230,7 +230,7 @@ const ScreenController = () => {
         });
 
         if (game.getResult() === 1) {
-            const result = `${activePlayer.playerName} wins!!!`;
+            const result = `♔ ${activePlayer.playerName} ♔ wins!!!`;
             resultDiv.textContent = result;
             disableButtons();
         } else if (game.getResult() === 0) {
@@ -238,7 +238,7 @@ const ScreenController = () => {
             resultDiv.textContent = result;
             disableButtons();
         } else if (game.getResult() === 2) {
-            const result = `${activePlayer.playerName} wins!!!`;
+            const result = `♔ ${activePlayer.playerName} ♔ wins!!!`;
             resultDiv.textContent = result;
             disableButtons();
         }
