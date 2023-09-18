@@ -66,8 +66,21 @@ body {
   font-weight: 900;
   font-size: 2rem;
   color: green;
+  animation: neon 1.5s ease-in-out infinite;
+  text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green, 0 0 40px green;
 }
 
+@keyframes neon {
+  0% {
+    text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green, 0 0 40px green;
+  }
+  50% {
+    text-shadow: none;
+  }
+  100% {
+    text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green, 0 0 40px green;
+  }
+}
 h2 {
   margin: 0;
   padding: 0;
