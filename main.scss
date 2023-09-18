@@ -2,6 +2,7 @@
     --background: rgb(39, 39, 39);
     --font-color: whitesmoke;
     font-size: 20px;
+    --result-color: rgb(14, 241, 14);
 }
 
 body {
@@ -72,9 +73,9 @@ body {
         > .result {
             font-weight: 900;
             font-size: 2rem;
-            color: green;
+            color: var(--result-color);
             animation: neon 1.5s ease-in-out infinite;
-            text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green, 0 0 40px green;
+            text-shadow: 0 0 10px , 0 0 20px , 0 0 30px , 0 0 40px ;
 
         }
     }
@@ -82,13 +83,13 @@ body {
 
 @keyframes neon {
     0% {
-        text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green, 0 0 40px green;
+        text-shadow: 0 0 10px var(--result-color), 0 0 20px var(--result-color), 0 0 30px var(--result-color), 0 0 40px var(--result-color);
     }
     50% {
         text-shadow: none;
     }
     100% {
-        text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green, 0 0 40px green;
+        text-shadow: 0 0 10px var(--result-color), 0 0 20px var(--result-color), 0 0 30px var(--result-color), 0 0 40px var(--result-color);
     }
 }
 

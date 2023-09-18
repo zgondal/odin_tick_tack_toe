@@ -233,6 +233,7 @@ const ScreenController = () => {
             const result = `♔ ${activePlayer.playerName} ♔ wins!!!`;
             resultDiv.textContent = result;
             disableButtons();
+            resultDiv.style.setProperty("--result-color", "rgb(14, 241, 14)");
         } else if (game.getResult() === 0) {
             const result = `Game ends in a tie ¯\\_(ツ)_/¯`;
             resultDiv.textContent = result;
@@ -241,6 +242,7 @@ const ScreenController = () => {
             const result = `♔ ${activePlayer.playerName} ♔ wins!!!`;
             resultDiv.textContent = result;
             disableButtons();
+            resultDiv.style.setProperty("--result-color", "rgb(241, 14, 14)")
         }
     }
 
